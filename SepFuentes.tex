@@ -226,20 +226,66 @@
     \section{Introducción}
 
 
-    El objetivo de este trabajo es la aplicación de las técnicas de Análisis
-por Componentes Principales (\emph{PCA, del inglés}) y de Análisis por
-Componentes Independientes (\emph{ICA, del inglés}) para separas tres
-imágenes mezcladas en sus componentes.
+    El objetivo de esta práctica es la aplicación de las técnicas de
+Análisis por Componentes Principales (\emph{PCA, del inglés}) y de
+Análisis por Componentes Independientes (\emph{ICA, del inglés}), para
+separas tres imágenes que se encuetran mezcladas para extraer las
+componentes y la matríz de mezcla.
+
+
+    \section{Fundamento Teórico}
+
+
+
+    \subsection{Problema Propuesto}
+
+
+    Se han provisto tres imágenes de \(512\times512\) píxeles cada una
+conteniendo una mezcla lineal de tres imágenes originales. Como se
+mostrará en la siguiente sección, dos de las imágenes originales pueden
+distinguirse claramente (una mujer joven y un gato). Sin embargo, la
+tercera imágen no es claramente identificable por lo que está oculta.
+
+Las imágenes a utilizar no contienen ningún componente de ruido. El
+modelo de mezcla utilizado se puede describir como:
+
+\[ \mathbf{y} = \mathbf{A} \mathbf{x} \]
+
+en donde \(\mathbf{y}\) son la imágenes mezcladas, \(\mathbf{x}\) las
+imágenes originales y \(\mathbf{A}\) es la matrix de mezcla (dimensión
+\(3\times3\)). Se desconoce tanto la matriz de mezcla \(\mathbf{A}\)
+como las componentes originales \(\mathbf{x}\). Este problema, en
+general, carece de solución determinada. Sin embargo, en este trabajo se
+utilizaran las técnicas deAnálisis de Componentes Principales y Análisis
+por Componentes Independientes para estimar ambos elementos bajo ciertas
+condiciones impuestas. La aplicación de estos métodos también tiene como
+objetivo la identificación de la tercera imagen original que se
+encuentra oculta.
+
+
+    \subsection{Análisis de Componentes Principales}
+
+
+    El Análisis de Componentes Principales (PCA, del inglés), es un
+prodedimiento estadístico para transformar un conjunto de observaciones
+mediante una transformación ortogonal a otro conjunto de componentes que
+esten descorrelacionadas, denominadas componentes principales.
+
+Esta tranformación se define de tal modo que cada componente tenga la
+máxima varianza posible bajo la condición de que la transfromación se
+ortogonal a las componentes anteriores. El procedimiento permite, de
+forma no paramétrica, la compresión o representación en un sistema de
+coordenadas que explique mejor la varianza de los datos.
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}27}]:} \PY{o}{\PYZpc{}}\PY{k}{matplotlib} \PY{n}{inline}
-         \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k+kn}{as} \PY{n+nn}{np}
-         \PY{k+kn}{import} \PY{n+nn}{matplotlib.pyplot} \PY{k+kn}{as} \PY{n+nn}{plt}
-         \PY{k+kn}{from} \PY{n+nn}{sklearn} \PY{k+kn}{import} \PY{n}{decomposition}
+{\color{incolor}In [{\color{incolor}2}]:} \PY{o}{\PYZpc{}}\PY{k}{matplotlib} \PY{n}{inline}
+        \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k+kn}{as} \PY{n+nn}{np}
+        \PY{k+kn}{import} \PY{n+nn}{matplotlib.pyplot} \PY{k+kn}{as} \PY{n+nn}{plt}
+        \PY{k+kn}{from} \PY{n+nn}{sklearn} \PY{k+kn}{import} \PY{n}{decomposition}
 \end{Verbatim}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}4}]:} \PY{n}{img\PYZus{}1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{genfromtxt}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{imagen\PYZus{}mezclada\PYZus{}uno.dat}\PY{l+s}{\PYZsq{}}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{float64}\PY{l+s}{\PYZsq{}}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}3}]:} \PY{n}{img\PYZus{}1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{genfromtxt}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{imagen\PYZus{}mezclada\PYZus{}uno.dat}\PY{l+s}{\PYZsq{}}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{float64}\PY{l+s}{\PYZsq{}}\PY{p}{)}
         \PY{n}{img\PYZus{}2} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{genfromtxt}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{imagen\PYZus{}mexclada\PYZus{}dos.dat}\PY{l+s}{\PYZsq{}}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{float64}\PY{l+s}{\PYZsq{}}\PY{p}{)}
         \PY{n}{img\PYZus{}3} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{genfromtxt}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{imagen\PYZus{}mexclada\PYZus{}tres.dat}\PY{l+s}{\PYZsq{}}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{float64}\PY{l+s}{\PYZsq{}}\PY{p}{)}
         
@@ -251,19 +297,24 @@ imágenes mezcladas en sus componentes.
 \end{Verbatim}
 
             \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}4}]:} <matplotlib.image.AxesImage at 0x1081a5e90>
+{\color{outcolor}Out[{\color{outcolor}3}]:} <matplotlib.image.AxesImage at 0x107dd1a50>
 \end{Verbatim}
         
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{SepFuentes_files/SepFuentes_3_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{SepFuentes_files/SepFuentes_8_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}26}]:} \PY{c}{\PYZsh{} each image is flattened and all three are stacked together}
-         \PY{n}{X} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{vstack}\PY{p}{(}\PY{p}{(}\PY{n}{img\PYZus{}1}\PY{o}{.}\PY{n}{flatten}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{img\PYZus{}2}\PY{o}{.}\PY{n}{flatten}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{img\PYZus{}3}\PY{o}{.}\PY{n}{flatten}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}4}]:} \PY{c}{\PYZsh{} each image is flattened and all three are stacked together}
+        \PY{n}{X} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{vstack}\PY{p}{(}\PY{p}{(}\PY{n}{img\PYZus{}1}\PY{o}{.}\PY{n}{flatten}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{img\PYZus{}2}\PY{o}{.}\PY{n}{flatten}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{img\PYZus{}3}\PY{o}{.}\PY{n}{flatten}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+        \PY{n}{X}\PY{o}{.}\PY{n}{shape}
 \end{Verbatim}
 
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}4}]:} (3, 262144)
+\end{Verbatim}
+        
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}24}]:} \PY{n}{pca} \PY{o}{=} \PY{n}{decomposition}\PY{o}{.}\PY{n}{PCA}\PY{p}{(}\PY{n}{n\PYZus{}components}\PY{o}{=}\PY{l+m+mi}{3}\PY{p}{)}
          \PY{n}{img\PYZus{}pca}\PY{o}{=} \PY{n}{pca}\PY{o}{.}\PY{n}{fit\PYZus{}transform}\PY{p}{(}\PY{n}{X}\PY{o}{.}\PY{n}{T}\PY{p}{)}
@@ -299,7 +350,7 @@ Mixing Matrix:
 \end{Verbatim}
         
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{SepFuentes_files/SepFuentes_5_2.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{SepFuentes_files/SepFuentes_10_2.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -335,7 +386,7 @@ Unmixing Matrix:
 \end{Verbatim}
         
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{SepFuentes_files/SepFuentes_6_2.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{SepFuentes_files/SepFuentes_11_2.png}
     \end{center}
     { \hspace*{\fill} \\}
     
