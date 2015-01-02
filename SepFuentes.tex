@@ -367,9 +367,10 @@ http://nbviewer.ipython.org/github/pablodecm/SepFuentes/blob/master/SepFuentes.i
 
 Se han utilizado las bibliotecas de software \emph{open source}:
 \emph{numpy} \cite{725236} para la manipulación de arrays y matrices,
-\emph{matplotlib} \cite{Hunter:2007} para la visualización de imágenes y
+\emph{matplotlib} \cite{Hunter:2007} para la visualización de imágenes,
 \emph{scikit-learn} \cite{scikit-learn} para las implementaciones de PCA
-e ICA utilizadas.
+e ICA utilizadas y \emph{sympy} \cite{sympy} para el formato de la
+salida de datos de matrices.
 
     A continuación, se importan todos los modulos necesarios de la
 bibliotecas que serán de utilidad en los apartados posteriores.
@@ -379,11 +380,28 @@ bibliotecas que serán de utilidad en los apartados posteriores.
         \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k+kn}{as} \PY{n+nn}{np}
         \PY{k+kn}{import} \PY{n+nn}{matplotlib.pyplot} \PY{k+kn}{as} \PY{n+nn}{plt}
         \PY{k+kn}{from} \PY{n+nn}{sklearn} \PY{k+kn}{import} \PY{n}{decomposition}
+        \PY{k+kn}{import} \PY{n+nn}{sympy}
+        \PY{n}{sympy}\PY{o}{.}\PY{n}{init\PYZus{}printing}\PY{p}{(}\PY{n}{use\PYZus{}latex}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{mathjax}\PY{l+s}{\PYZsq{}}\PY{p}{)}
 \end{Verbatim}
 
 
-    \subsection{Visualización de las Imágenes Provistas}
+    \subsection{Importación y Visualización de las Imágenes}
 
+
+    Las imágenes mezcladas se encuentran en los archivos de texto:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  imagen\_mezclada\_uno.dat
+\item
+  imagen\_mexclada\_dos.dat
+\item
+  imagen\_mexclada\_tres.dat
+\end{itemize}
+
+En este apartado, se van a importar las imágenes a un formato de array
+multidimensional y se van a visualizar:
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}2}]:} \PY{n}{img\PYZus{}1} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{genfromtxt}\PY{p}{(}\PY{l+s}{\PYZsq{}}\PY{l+s}{imagen\PYZus{}mezclada\PYZus{}uno.dat}\PY{l+s}{\PYZsq{}}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{l+s}{\PYZsq{}}\PY{l+s}{float64}\PY{l+s}{\PYZsq{}}\PY{p}{)}
@@ -393,133 +411,218 @@ bibliotecas que serán de utilidad en los apartados posteriores.
         \PY{n}{f}\PY{p}{,} \PY{p}{(}\PY{n}{ax1}\PY{p}{,}\PY{n}{ax2}\PY{p}{,}\PY{n}{ax3}\PY{p}{)} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{)}
         \PY{n}{f}\PY{o}{.}\PY{n}{set\PYZus{}size\PYZus{}inches}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{24}\PY{p}{,}\PY{l+m+mi}{40}\PY{p}{)}\PY{p}{)}
         \PY{n}{ax1}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{img\PYZus{}1}\PY{p}{,} \PY{n}{cmap}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{cm}\PY{o}{.}\PY{n}{gray}\PY{p}{)}
+        \PY{n}{ax1}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Imagen Mezclada 1}\PY{l+s}{\PYZdq{}}\PY{p}{)}
         \PY{n}{ax2}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{img\PYZus{}2}\PY{p}{,} \PY{n}{cmap}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{cm}\PY{o}{.}\PY{n}{gray}\PY{p}{)}
+        \PY{n}{ax2}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Imagen Mezclada 2}\PY{l+s}{\PYZdq{}}\PY{p}{)}
         \PY{n}{ax3}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{img\PYZus{}3}\PY{p}{,} \PY{n}{cmap}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{cm}\PY{o}{.}\PY{n}{gray}\PY{p}{)}
+        \PY{n}{ax3}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Imagen Mezclada 3}\PY{l+s}{\PYZdq{}}\PY{p}{)}
 \end{Verbatim}
 
             \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}2}]:} <matplotlib.image.AxesImage at 0x107e78c50>
+{\color{outcolor}Out[{\color{outcolor}2}]:} <matplotlib.text.Text at 0x1089bea10>
 \end{Verbatim}
         
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{SepFuentes_files/SepFuentes_15_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{SepFuentes_files/SepFuentes_16_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
+    Se aprecia que las imagenes provistas contienen tres imágenes mezcladas.
+La visualización permite distinguir visualmente tres objetos
+identificables a una mujer jover, un gato y lo que parece una página de
+un libro con texto e ilustraciones.
+
+Se han importado y visualizado las imágenes, sin embargo, el formato de
+matriz no es adecuado para la aplicación de PCA e ICA. Por dicho motivo,
+se van a transformar la matrices \(512\times 512\) en vectores de 262144
+elementos. Las tres componentes mezcladas a su vez se apilan
+verticalmente para formar la matríz \(\mathbf{Y}\), de dimensiones
+\(3\times 262144\).
+
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}3}]:} \PY{c}{\PYZsh{} each image is flattened and all three are stacked together}
-        \PY{n}{X} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{vstack}\PY{p}{(}\PY{p}{(}\PY{n}{img\PYZus{}1}\PY{o}{.}\PY{n}{flatten}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{img\PYZus{}2}\PY{o}{.}\PY{n}{flatten}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{img\PYZus{}3}\PY{o}{.}\PY{n}{flatten}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
-        \PY{n}{X}\PY{o}{.}\PY{n}{shape}
+        \PY{n}{Y} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{vstack}\PY{p}{(}\PY{p}{(}\PY{n}{img\PYZus{}1}\PY{o}{.}\PY{n}{flatten}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{img\PYZus{}2}\PY{o}{.}\PY{n}{flatten}\PY{p}{(}\PY{p}{)}\PY{p}{,}\PY{n}{img\PYZus{}3}\PY{o}{.}\PY{n}{flatten}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+        \PY{n}{Y}\PY{o}{.}\PY{n}{shape}
 \end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}3}]:}
+    
+    
+        \begin{equation*}
+        \begin{pmatrix}3, & 262144\end{pmatrix}
+        \end{equation*}
 
-            \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}3}]:} (3, 262144)
-\end{Verbatim}
-        
+    
+
+
+    \subsection{Aplicación del método PCA}
+
+
+    La impleméntacion del método de componenetes principales utilizada es la
+provista por el módulo \emph{decomposition.PCA} de \emph{scikit-learn}.
+Se basa en la el método de descomposición en valores singulares (SVD en
+inglés).
+
+A continuación, se aplica el método a la matríz \(\mathbf{Y}\) y se
+visualizan las componentes principales de los datos de nuevo en forma de
+imagen:
+
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}4}]:} \PY{n}{pca} \PY{o}{=} \PY{n}{decomposition}\PY{o}{.}\PY{n}{PCA}\PY{p}{(}\PY{n}{n\PYZus{}components}\PY{o}{=}\PY{l+m+mi}{3}\PY{p}{)}
-        \PY{n}{img\PYZus{}pca}\PY{o}{=} \PY{n}{pca}\PY{o}{.}\PY{n}{fit\PYZus{}transform}\PY{p}{(}\PY{n}{X}\PY{o}{.}\PY{n}{T}\PY{p}{)}
-        \PY{n}{f}\PY{p}{,} \PY{p}{(}\PY{n}{ax1}\PY{p}{,}\PY{n}{ax2}\PY{p}{,}\PY{n}{ax3}\PY{p}{)} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{)}
+        \PY{n}{img\PYZus{}pca}\PY{o}{=} \PY{n}{pca}\PY{o}{.}\PY{n}{fit\PYZus{}transform}\PY{p}{(}\PY{n}{Y}\PY{o}{.}\PY{n}{T}\PY{p}{)}
         
-        \PY{k}{print} \PY{n}{X}\PY{o}{.}\PY{n}{T}\PY{o}{.}\PY{n}{shape}
-        \PY{k}{print} \PY{l+s}{\PYZdq{}}\PY{l+s}{Explained variance:}\PY{l+s+se}{\PYZbs{}n}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{n}{pca}\PY{o}{.}\PY{n}{explained\PYZus{}variance\PYZus{}}
-        \PY{k}{print} \PY{l+s}{\PYZdq{}}\PY{l+s}{Explained variance ratio:}\PY{l+s+se}{\PYZbs{}n}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{n}{pca}\PY{o}{.}\PY{n}{explained\PYZus{}variance\PYZus{}ratio\PYZus{}}
-        \PY{k}{print} \PY{l+s}{\PYZdq{}}\PY{l+s}{Inverse of Mixing Matrix:}\PY{l+s+se}{\PYZbs{}n}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{n}{pca}\PY{o}{.}\PY{n}{components\PYZus{}}
-        \PY{k}{print} \PY{l+s}{\PYZdq{}}\PY{l+s}{Mixing Matrix:}\PY{l+s+se}{\PYZbs{}n}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{linalg}\PY{o}{.}\PY{n}{inv}\PY{p}{(}\PY{n}{pca}\PY{o}{.}\PY{n}{components\PYZus{}}\PY{p}{)}
+        \PY{n}{f}\PY{p}{,} \PY{p}{(}\PY{n}{ax1}\PY{p}{,}\PY{n}{ax2}\PY{p}{,}\PY{n}{ax3}\PY{p}{)} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{)}
         \PY{n}{f}\PY{o}{.}\PY{n}{set\PYZus{}size\PYZus{}inches}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{24}\PY{p}{,}\PY{l+m+mi}{40}\PY{p}{)}\PY{p}{)}
         \PY{n}{ax1}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{img\PYZus{}pca}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{512}\PY{p}{,}\PY{l+m+mi}{512}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{cmap}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{cm}\PY{o}{.}\PY{n}{gray}\PY{p}{)}
+        \PY{n}{ax1}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Componente Principal 1}\PY{l+s}{\PYZdq{}}\PY{p}{)}
         \PY{n}{ax2}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{img\PYZus{}pca}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{512}\PY{p}{,}\PY{l+m+mi}{512}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{cmap}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{cm}\PY{o}{.}\PY{n}{gray}\PY{p}{)}
+        \PY{n}{ax2}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Componente Principal 2}\PY{l+s}{\PYZdq{}}\PY{p}{)}
         \PY{n}{ax3}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{img\PYZus{}pca}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{512}\PY{p}{,}\PY{l+m+mi}{512}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{cmap}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{cm}\PY{o}{.}\PY{n}{gray}\PY{p}{)}
+        \PY{n}{ax3}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Componente Principal 3}\PY{l+s}{\PYZdq{}}\PY{p}{)}
 \end{Verbatim}
 
-    \begin{Verbatim}[commandchars=\\\{\}]
-(262144, 3)
-Explained variance:
-[ 5.72141859  0.90953297  0.189357  ]
-Explained variance ratio:
-[ 0.83887973  0.13335657  0.0277637 ]
-Inverse of Mixing Matrix:
-[[ 0.65909172  0.14263253  0.73841321]
- [ 0.74315636 -0.27417719 -0.61036505]
- [ 0.11539815  0.95104302 -0.28670619]]
-Mixing Matrix:
-[[ 0.65909172  0.74315636  0.11539815]
- [ 0.14263253 -0.27417719  0.95104302]
- [ 0.73841321 -0.61036505 -0.28670619]]
-    \end{Verbatim}
-
             \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}4}]:} <matplotlib.image.AxesImage at 0x10809b5d0>
+{\color{outcolor}Out[{\color{outcolor}4}]:} <matplotlib.text.Text at 0x108c19f90>
 \end{Verbatim}
         
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{SepFuentes_files/SepFuentes_17_2.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{SepFuentes_files/SepFuentes_21_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
+    Se observa que las componentes obtenidas son más facilmente
+distinguibles que en el caso anterior. Sin embargo, como se esperaba, el
+PCA no ha conseguido separar las imágenes en su totalidad. Esto se
+aprecia claramente para la tercera componente que es una combinación de
+la imagen de mujer joven y de la imagen del gato. Es posible también
+obtener la varianza (autovalores)explicada por cada componente en
+porcentaje:
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}5}]:} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{seed}\PY{p}{(}\PY{l+m+mi}{20}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}5}]:} \PY{n}{sympy}\PY{o}{.}\PY{n}{Matrix}\PY{p}{(}\PY{n}{pca}\PY{o}{.}\PY{n}{explained\PYZus{}variance\PYZus{}ratio\PYZus{}}\PY{o}{.}\PY{n}{round}\PY{p}{(}\PY{n}{decimals}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}5}]:}
+    
+    
+        \begin{equation*}
+        \left[\begin{matrix}0.8389 & 0.1334 & 0.0278\end{matrix}\right]
+        \end{equation*}
+
+    
+
+    La primera componenente explica más del \(83 \%\) de la varianza total,
+mientras que los porcentajes de las otras dos son mucho más pequeños. Se
+puede obtener la matríz \(\mathbf{P}\) con los autovectores de la matríz
+de covarianza.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}6}]:} \PY{n}{sympy}\PY{o}{.}\PY{n}{Eq}\PY{p}{(} \PY{n}{sympy}\PY{o}{.}\PY{n}{MatrixSymbol}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{\PYZbs{}}\PY{l+s}{mathbf\PYZob{}P\PYZcb{}}\PY{l+s}{\PYZdq{}}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{,}
+                 \PY{n}{sympy}\PY{o}{.}\PY{n}{Matrix}\PY{p}{(}\PY{n}{pca}\PY{o}{.}\PY{n}{components\PYZus{}}\PY{o}{.}\PY{n}{round}\PY{p}{(}\PY{n}{decimals}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}6}]:}
+    
+    
+        \begin{equation*}
+        \mathbf{P} = \left[\begin{matrix}0.6591 & 0.1426 & 0.7384\\0.7432 & -0.2742 & -0.6104\\0.1154 & 0.951 & -0.2867\end{matrix}\right]
+        \end{equation*}
+
+    
+
+    Una primera estimación de la matríz de mezcla \(\mathbf{A}_{PCA}\) puede
+ser obtenida como la inversa de la tranformación \(\mathbf{P}\)
+obteniendo:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}7}]:} \PY{n}{A\PYZus{}pca} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linalg}\PY{o}{.}\PY{n}{inv}\PY{p}{(}\PY{n}{pca}\PY{o}{.}\PY{n}{components\PYZus{}}\PY{p}{)}
+        \PY{n}{sympy}\PY{o}{.}\PY{n}{Eq}\PY{p}{(}\PY{n}{sympy}\PY{o}{.}\PY{n}{MatrixSymbol}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{\PYZbs{}}\PY{l+s}{mathbf\PYZob{}A\PYZcb{}\PYZus{}\PYZob{}PCA\PYZcb{}}\PY{l+s}{\PYZdq{}}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{,}
+                 \PY{n}{sympy}\PY{o}{.}\PY{n}{Matrix}\PY{p}{(}\PY{n}{A\PYZus{}pca}\PY{o}{.}\PY{n}{round}\PY{p}{(}\PY{n}{decimals}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}7}]:}
+    
+    
+        \begin{equation*}
+        \mathbf{A}_{{PCA}} = \left[\begin{matrix}0.6591 & 0.7432 & 0.1154\\0.1426 & -0.2742 & 0.951\\0.7384 & -0.6104 & -0.2867\end{matrix}\right]
+        \end{equation*}
+
+    
+
+
+    \subsection{Aplicación del método ICA}
+
+
+    La aplicación del método de componentes independientes utizada es
+provista en la biblioteca \emph{scikit-learn} y utiliza el algorímtmo de
+maximización de la no-gaussianidad \emph{FastICA} \cite{fastica}. En
+concreto, se basa en la maximización de la negentropía a partir de un
+esquema iterativo de punto fijo. Internamente, la implementación aplica
+PCA en el preprocesamieto para blaquear los datos.
+
+El resultado de la aplicación este método para las imágenes provistas se
+muestran el siguientes lineas:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}8}]:} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{seed}\PY{p}{(}\PY{l+m+mi}{27}\PY{p}{)}
         
         \PY{n}{ica} \PY{o}{=} \PY{n}{decomposition}\PY{o}{.}\PY{n}{FastICA}\PY{p}{(}\PY{n}{n\PYZus{}components}\PY{o}{=}\PY{l+m+mi}{3}\PY{p}{)}
-        \PY{n}{img\PYZus{}ica}\PY{o}{=} \PY{n}{ica}\PY{o}{.}\PY{n}{fit\PYZus{}transform}\PY{p}{(}\PY{n}{X}\PY{o}{.}\PY{n}{T}\PY{p}{)}
-        
-        \PY{k}{print} \PY{l+s}{\PYZdq{}}\PY{l+s}{Mixing Matrix:}\PY{l+s+se}{\PYZbs{}n}\PY{l+s}{\PYZdq{}}\PY{p}{,}\PY{n}{ica}\PY{o}{.}\PY{n}{mixing\PYZus{}}
-        \PY{k}{print} \PY{l+s}{\PYZdq{}}\PY{l+s}{Unmixing Matrix:}\PY{l+s+se}{\PYZbs{}n}\PY{l+s}{\PYZdq{}}\PY{p}{,}\PY{n}{ica}\PY{o}{.}\PY{n}{components\PYZus{}}
+        \PY{n}{img\PYZus{}ica}\PY{o}{=} \PY{n}{ica}\PY{o}{.}\PY{n}{fit\PYZus{}transform}\PY{p}{(}\PY{n}{Y}\PY{o}{.}\PY{n}{T}\PY{p}{)}
         
         \PY{n}{f}\PY{p}{,} \PY{p}{(}\PY{n}{ax1}\PY{p}{,}\PY{n}{ax2}\PY{p}{,}\PY{n}{ax3}\PY{p}{)} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{)}
         \PY{n}{f}\PY{o}{.}\PY{n}{set\PYZus{}size\PYZus{}inches}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{24}\PY{p}{,}\PY{l+m+mi}{40}\PY{p}{)}\PY{p}{)}
         \PY{n}{ax1}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{img\PYZus{}ica}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{512}\PY{p}{,}\PY{l+m+mi}{512}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{cmap}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{cm}\PY{o}{.}\PY{n}{gray}\PY{p}{)}
+        \PY{n}{ax1}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Componente Independiente 1}\PY{l+s}{\PYZdq{}}\PY{p}{)}
         \PY{n}{ax2}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{img\PYZus{}ica}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{512}\PY{p}{,}\PY{l+m+mi}{512}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{cmap}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{cm}\PY{o}{.}\PY{n}{gray}\PY{p}{)}
+        \PY{n}{ax2}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Componente Independiente 2}\PY{l+s}{\PYZdq{}}\PY{p}{)}
         \PY{n}{ax3}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{img\PYZus{}ica}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{512}\PY{p}{,}\PY{l+m+mi}{512}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{cmap}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{cm}\PY{o}{.}\PY{n}{gray}\PY{p}{)}
+        \PY{n}{ax3}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Componente Independiente 3}\PY{l+s}{\PYZdq{}}\PY{p}{)}
 \end{Verbatim}
 
-    \begin{Verbatim}[commandchars=\\\{\}]
-Mixing Matrix:
-[[-567.29852888  675.60652116  -74.83530837]
- [-241.26704961  -37.39529646  183.64472666]
- [-419.33633585  630.17696537  581.14653985]]
-Unmixing Matrix:
-[[-0.00103173 -0.00330088  0.00091023]
- [ 0.00047438 -0.00271003  0.00091747]
- [-0.00125886  0.00055686  0.00138266]]
-    \end{Verbatim}
-
             \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}5}]:} <matplotlib.image.AxesImage at 0x10a809ad0>
+{\color{outcolor}Out[{\color{outcolor}8}]:} <matplotlib.text.Text at 0x109729410>
 \end{Verbatim}
         
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{SepFuentes_files/SepFuentes_18_2.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{SepFuentes_files/SepFuentes_30_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}6}]:} \PY{n}{np}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{X}\PY{p}{,}\PY{n}{X}\PY{o}{.}\PY{n}{T}\PY{p}{)}
-        \PY{n}{np}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{img\PYZus{}pca}\PY{o}{.}\PY{n}{T}\PY{p}{,}\PY{n}{img\PYZus{}pca}\PY{p}{)}
-\end{Verbatim}
+    Se aprecia claramente que el método ICA ha permitido separar las
+componentes independientes que estaban mezcladas en las imágenes
+provistas. Las tres imagenes son perfectamente identificables despues de
+la tranformación. Se aprecia una inversión del color segunda componente,
+lo que pueden explicarse dado que las componentes por ICA pueden incluir
+la multiplicación por un un escalar (negativo como en este caso) o
+comutaciones.La matríz de mezcla \(\mathbf{A}_{ICA}\) en este caso
+tambien se puede estimar como:
 
-            \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}6}]:} array([[  1.49983556e+06,  -1.52587631e-09,  -3.71935371e-10],
-               [ -1.52587631e-09,   2.38428612e+05,   2.27581509e-10],
-               [ -3.71935371e-10,   2.27581509e-10,   4.96388021e+04]])
-\end{Verbatim}
-        
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}7}]:} \PY{n}{X}
+{\color{incolor}In [{\color{incolor}9}]:} \PY{n}{sympy}\PY{o}{.}\PY{n}{Eq}\PY{p}{(} \PY{n}{sympy}\PY{o}{.}\PY{n}{MatrixSymbol}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{\PYZbs{}}\PY{l+s}{mathbf\PYZob{}A\PYZcb{}\PYZus{}\PYZob{}ICA\PYZcb{}}\PY{l+s}{\PYZdq{}}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{,}
+                 \PY{n}{sympy}\PY{o}{.}\PY{n}{Matrix}\PY{p}{(}\PY{n}{ica}\PY{o}{.}\PY{n}{mixing\PYZus{}}\PY{o}{.}\PY{n}{round}\PY{p}{(}\PY{n}{decimals}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{)}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
+\texttt{\color{outcolor}Out[{\color{outcolor}9}]:}
+    
+    
+        \begin{equation*}
+        \mathbf{A}_{{ICA}} = \left[\begin{matrix}-566.9308 & 75.3859 & 675.8539\\-241.3357 & -183.6017 & -37.1631\\-419.1685 & -580.6624 & 630.7346\end{matrix}\right]
+        \end{equation*}
 
-            \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}7}]:} array([[-0.20441684, -0.21622352, -0.22803021, \ldots, -1.6040118 ,
-                -1.5789903 , -1.4360781 ],
-               [-0.55223228, -0.50717805, -0.46212381, \ldots, -0.2389776 ,
-                -0.20706421, -0.19486738],
-               [-0.04551583,  0.09989691,  0.24530965, \ldots, -0.96726079,
-                -0.82407212, -0.73492105]])
-\end{Verbatim}
-        
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}}]:} 
-\end{Verbatim}
+    
+
+
+    \section{Conclusiones}
+
+
+    Se han utilizado los métodos de análisis por Componentes Principales y
+Componentes Independientes para intentar separar tres imágenes mezcladas
+linealmente en otras tres imágenes.
+
+Los resultados obtenidos por el método de Componentes Principales han
+permitido descubrir tranformar los datos a una nueva base en la que las
+nuevas componentes estan descorrelacionadas. El resultado de este método
+perimite una mayor distinción entre las imágenes pero se sigue
+observando una mezcla parcial.
+
+El método de componentes independientes, sim embargo, se adecúa mucho
+mas al problema propuesto y es capaz de reproducir las componentes
+originales salvo factores y conmutaciones con exactitud.
 
 
     % Add a bibliography block to the postdoc
