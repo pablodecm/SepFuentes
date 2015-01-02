@@ -4,4 +4,7 @@ SepFuentes_files
 *.aux
 *.log
 *.DS_Store
-
+*.bbl
+*.blg
+*.synctex.gz
+*.fdb_latexmk

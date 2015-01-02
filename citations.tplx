@@ -1,0 +1,14 @@
+((*- extends 'article.tplx' -*))
+
+((* block author *))
+\author{Pablo de Castro}
+((* endblock author *))
+
+((* block title *))
+\title{Separación de imágenes con técnicas de PCA e ICA}
+((* endblock title *))
+
+((* block bibliography *))
+\bibliographystyle{unsrt}
+\bibliography{ipython}
+((* endblock bibliography *))
